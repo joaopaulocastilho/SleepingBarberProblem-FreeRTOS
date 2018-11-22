@@ -23,6 +23,9 @@ void setup() {
   mutexLugares = xSemaphoreCreateMutex();
   mutexImprime = xSemaphoreCreateMutex();
 
+  /* Para usar o random */
+  srand(567);
+
   /* Se está tudo ok com os semáforos, vamos criar as tarefas */
   if (semBarber != NULL && semCustomers != NULL && mutexLugares != NULL
       && mutexImprime != NULL) {
@@ -53,10 +56,15 @@ static void barber(void *pvParameters) {
         Serial.flush();
         vTaskDelay(3000 / portTICK_PERIOD_MS);
       xSemaphoreGive(mutexImprime);
+      vTaskDelay((rand() % 3000) / portTICK_PERIOD_MS);
       xSemaphoreGive(semBarber);
-    
-    
+      xSemaphoreTake(mutexImprime, portMAX_DELAY);
+        Serial.println("Cliente já cortou e foi embora");
+        Serial.flush();
+        vTaskDelay(3000 / portTICK_PERIOD_MS);
+      xSemaphoreGive(mutexImprime);
   }
+  vTaskDelay((rand() % 3000) / portTICK_PERIOD_MS);
 }
 
 static void customer(void *pvParameters) {
@@ -75,9 +83,8 @@ static void customer(void *pvParameters) {
          xSemaphoreGive(mutexLugares);
       } else xSemaphoreGive(mutexLugares);
     xSemaphoreGive(mutexLugares);
+    vTaskDelay((rand() % 3000) / portTICK_PERIOD_MS);
   }
-
-
 }
 
 
