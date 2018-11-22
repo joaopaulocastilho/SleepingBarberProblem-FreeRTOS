@@ -62,7 +62,7 @@ static void barber(void *pvParameters) {
       vTaskDelay((rand() % 3000) / portTICK_PERIOD_MS);
       xSemaphoreGive(semBarber);
       xSemaphoreTake(mutexImprime, portMAX_DELAY);
-        Serial.println("Cliente já cortou e foi embora");
+        Serial.println("Cliente que estava cortando foi embora");
         Serial.flush();
         vTaskDelay(3000 / portTICK_PERIOD_MS);
       xSemaphoreGive(mutexImprime);
@@ -86,7 +86,7 @@ static void customer(void *pvParameters) {
          xSemaphoreGive(semCustomers);
          xSemaphoreGive(mutexLugares);
       } else xSemaphoreGive(mutexLugares);
-    xSemaphoreGive(mutexLugares);
+    //xSemaphoreGive(mutexLugares);
     vTaskDelay((rand() % 3000) / portTICK_PERIOD_MS);
   }
 }
