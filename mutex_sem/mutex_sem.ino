@@ -40,12 +40,15 @@ void setup() {
 static void barber(void *pvParameters) {
   while (true) {
     xSemaphoreTake(semCustomers, portMAX_DELAY);
+    
+    xSemaphoreTake(mutexLugares, portMAX_DELAY);
     xSemaphoreTake(mutexImprime, portMAX_DELAY);
-      Serial.println("Barbeiro pegou cliente");
+      Serial.print("Barbeiro pegou cliente, total na fila: ");
+      Serial.println(5-(lugares+1));
       Serial.flush();
       vTaskDelay(3000 / portTICK_PERIOD_MS);
     xSemaphoreGive(mutexImprime);
-    xSemaphoreTake(mutexLugares, portMAX_DELAY);
+    
       lugares++;
       
       xSemaphoreTake(semBarber, portMAX_DELAY);
@@ -74,7 +77,8 @@ static void customer(void *pvParameters) {
         lugares--;
 
           xSemaphoreTake(mutexImprime, portMAX_DELAY);
-            Serial.println("Chegou um novo cliente");
+            Serial.print("Chegou um novo cliente, total na fila: ");
+            Serial.println(5-lugares);
             Serial.flush();
             vTaskDelay(3000 / portTICK_PERIOD_MS);
           xSemaphoreGive(mutexImprime);
