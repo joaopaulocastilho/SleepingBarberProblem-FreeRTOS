@@ -82,11 +82,16 @@ static void customer(void *pvParameters) {
             Serial.flush();
             vTaskDelay(3000 / portTICK_PERIOD_MS);
           xSemaphoreGive(mutexImprime);
-        
          xSemaphoreGive(semCustomers);
          xSemaphoreGive(mutexLugares);
-      } else xSemaphoreGive(mutexLugares);
-    //xSemaphoreGive(mutexLugares);
+      } else {
+        xSemaphoreTake(mutexImprime, portMAX_DELAY);
+        Serial.println("Chegou um cliente, mas a sala de espera esta cheia.");
+        Serial.flush();
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
+      xSemaphoreGive(mutexImprime);
+        xSemaphoreGive(mutexLugares);
+      }
     vTaskDelay((rand() % 3000) / portTICK_PERIOD_MS);
   }
 }
