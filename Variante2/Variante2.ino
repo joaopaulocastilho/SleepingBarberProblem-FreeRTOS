@@ -74,7 +74,7 @@ static void barber(void *pvParameters) {
       }
     }
     xSemaphoreTake(mutexImprime, portMAX_DELAY);
-      Serial.println("Cortanto o Cabelo do Cliente");
+      Serial.println("Cortanto o cabelo do cliente");
       Serial.flush();
       vTaskDelay(2000 / portTICK_PERIOD_MS);
     xSemaphoreGive(mutexImprime);
@@ -106,7 +106,7 @@ static void customer(void *pvParameters) {
     int pos;
     if ((pos = colocaEspera()) != -1) {
       xSemaphoreTake(mutexImprime, portMAX_DELAY);
-        Serial.print("Chegou um novo cliente na sala de esprea, total esperando: ");
+        Serial.print("Chegou um novo cliente na sala de espera, total esperando: ");
         Serial.println(totalFila());
         Serial.flush();
         vTaskDelay(2000 / portTICK_PERIOD_MS);
@@ -120,24 +120,6 @@ static void customer(void *pvParameters) {
     }
     vTaskDelay((rand() % 3000) / portTICK_PERIOD_MS);
   }
-  /*while (true) {
-    xSemaphoreTake(mutexLugares, portMAX_DELAY);
-      if (lugares > 0) {
-        lugares--;
-
-          xSemaphoreTake(mutexImprime, portMAX_DELAY);
-            Serial.print("Chegou um novo cliente, total na fila: ");
-            Serial.println(5-lugares);
-            Serial.flush();
-            vTaskDelay(3000 / portTICK_PERIOD_MS);
-          xSemaphoreGive(mutexImprime);
-        
-         xSemaphoreGive(semCustomers);
-         xSemaphoreGive(mutexLugares);
-      } else xSemaphoreGive(mutexLugares);
-    //xSemaphoreGive(mutexLugares);
-    vTaskDelay((rand() % 3000) / portTICK_PERIOD_MS);
-  }*/
 }
 
 
